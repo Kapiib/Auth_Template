@@ -1,0 +1,52 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const connectDB = require('./db/dbConfig');
+const checkJWT = require('./middleware/checkJWT');
+const authRoutes = require('./routes/authRoutes');
+const { checkAuth } = require('./middleware/checkAuth');
+
+// Load environment variables
+dotenv.config();
+
+// Initialize Express app
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// View engine setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Apply JWT check to all routes
+app.use(checkJWT);
+
+// Routes
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Home' });
+});
+
+app.get('/profile', checkAuth, (req, res) => {
+    res.render('profile', { 
+        title: 'Profile',
+        user: req.user
+    });
+});
+
+// Auth routes
+app.use('/auth', authRoutes);
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

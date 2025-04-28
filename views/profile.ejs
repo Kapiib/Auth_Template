@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('partials/head') %>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+        <h1>My Profile</h1>
+        
+        <div class="profile-card">
+            <div class="profile-info">
+                <h3>Name</h3>
+                <p><%= user.name %></p>
+            </div>
+            
+            <div class="profile-info">
+                <h3>Email</h3>
+                <p><%= user.email %></p>
+            </div>
+            
+            <div class="profile-info">
+                <h3>Role</h3>
+                <p><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+            </div>
+            
+            <div class="profile-info">
+                <h3>Account Created</h3>
+                <p><%= new Date(user.createdAt).toLocaleDateString() %></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
