@@ -8,15 +8,16 @@ const checkJWT = (req, res, next) => {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = decoded;
-            res.locals.user = decoded;
+            // Make user available to all templates without using locals
+            res.app.locals.user = decoded;
         } catch (error) {
             res.clearCookie('jwt');
             req.user = null;
-            res.locals.user = null;
+            res.app.locals.user = null;
         }
     } else {
         req.user = null;
-        res.locals.user = null;
+        res.app.locals.user = null;
     }
     
     next();

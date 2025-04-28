@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./db/dbConfig');
 const checkJWT = require('./middleware/checkJWT');
 const authRoutes = require('./routes/authRoutes');
+const getRoutes = require('./routes/getRoutes');
 const { checkAuth } = require('./middleware/checkAuth');
 
 // Load environment variables
@@ -32,18 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(checkJWT);
 
 // Routes
-app.get('/', (req, res) => {
-    res.render('index', { title: 'Home' });
-});
-
-app.get('/profile', checkAuth, (req, res) => {
-    res.render('profile', { 
-        title: 'Profile',
-        user: req.user
-    });
-});
-
-// Auth routes
+app.use('/', getRoutes);
 app.use('/auth', authRoutes);
 
 // Start server
