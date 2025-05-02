@@ -83,32 +83,9 @@ const authController = {
                 });
             }
             
-            // Create JWT payload with all required fields
-            const payload = {
-                id: user._id,           
-                userId: user._id,       
-                name: user.name,        
-                email: user.email,      
-                role: user.role,         
-                createdAt: user.createdAt 
-            }
-
-            // Generate token and set cookie
-            const token = createToken(payload);
-
-            res.cookie('jwt', token, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000 // 1 day
-            });
-            
-            console.log(`User logged in successfully: ${user.name} (${user.email}) with role: ${user.role}`);
-            
-            // Redirect based on role
-            if (user.role === 'admin') {
-                res.redirect('/admin/dashboard');
-            } else {
-                res.redirect('/profile');
-            }
+            // After successful verification
+            const redirectUrl = await handleSuccessfulAuth(user, res);
+            return res.redirect(redirectUrl);
             
         } catch (error) {
             console.error(`Login error: ${error.message}`, error);
@@ -131,5 +108,33 @@ const authController = {
         return res.redirect("/");
     }
 }
+
+// Add this function to your existing authController
+
+// This function handles what happens after successful authentication
+// regardless of authentication method
+const handleSuccessfulAuth = async (user, res) => {
+    // Create JWT payload
+    const payload = {
+        id: user._id,
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt
+    };
+    
+    // Generate and set token
+    const token = createToken(payload);
+    res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
+    
+    console.log(`User authenticated: ${user.name} (${user.email})`);
+    
+    // Return the redirect URL based on role
+    return user.role === 'admin' ? '/admin/dashboard' : '/profile';
+};
 
 module.exports = authController;

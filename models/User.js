@@ -15,8 +15,16 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        // Only required if not using OAuth
+        required: function() {
+            return !this.authProviders || this.authProviders.length === 0;
+        }
     },
+    // For OAuth providers like Google
+    authProviders: [{
+        provider: String,  // 'google', 'github', etc.
+        providerId: String // The ID from the provider
+    }],
     role: {
         type: String,
         enum: ['user', 'moderator', 'admin'],

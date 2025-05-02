@@ -9,13 +9,14 @@ const authRoutes = require('./routes/authRoutes');
 const getRoutes = require('./routes/getRoutes');
 const { checkAuth } = require('./middleware/checkAuth');
 const passwordResetRoutes = require('./routes/passwordResetRoutes');
+const googleAuthRoutes = require('./routes/googleAuthRoutes');
 
 // Load environment variables
 dotenv.config();
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Connect to MongoDB
 connectDB();
@@ -36,6 +37,7 @@ app.use(checkJWT);
 // Routes
 app.use('/', getRoutes);
 app.use('/auth', authRoutes);
+app.use('/auth', googleAuthRoutes);
 app.use('/password-reset', passwordResetRoutes);
 
 // Start server
