@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('../partials/head') %>
+    <%- include('../../partials/head') %>
 <body>
-    <%- include('../partials/navbar') %>
+    <%- include('../../partials/navbar') %>
 
     <div class="container">
         <div class="form-container">
@@ -14,7 +14,7 @@
                 </div>
             <% } %>
             
-            <form action="/password-reset/<%= token %>" method="POST">
+            <form action="/security/reset/<%= token %>" method="POST">
                 <div class="form-group">
                     <label for="password">New Password</label>
                     <input type="password" id="password" name="password" required>

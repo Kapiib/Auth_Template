@@ -3,7 +3,7 @@ const router = express.Router();
 const passwordResetController = require('../controllers/passwordResetController');
 const { resetRequestLimiter } = require('../middleware/rateLimiter');
 
-// Request password reset
+// Routes are now relative to /security/reset
 router.get('/request', passwordResetController.showRequestForm);
 router.post('/request', resetRequestLimiter, passwordResetController.requestReset);
 

@@ -6,7 +6,7 @@ const { sendResetEmail } = require('../utils/resetPasswordUtil');
 const passwordResetController = {
     // Render the request password reset page
     showRequestForm: (req, res) => {
-        res.render('password-reset/request', {
+        res.render('security/reset/request', {
             title: 'Reset Password',
             error: null
         });
@@ -21,7 +21,7 @@ const passwordResetController = {
             const user = await User.findOne({ email });
             if (!user) {
                 console.log(`Password reset failed: User not found - ${email}`);
-                return res.render('password-reset/request', {
+                return res.render('security/reset/request', {
                     title: 'Reset Password',
                     error: 'If a user with that email exists, a reset link has been sent'
                 });
@@ -42,14 +42,14 @@ const passwordResetController = {
             console.log(`Password reset requested for: ${email}`);
             
             // Don't reveal if user exists for security
-            return res.render('password-reset/confirmation', {
+            return res.render('security/reset/confirmation', {
                 title: 'Reset Email Sent',
                 message: 'If an account with that email exists, a password reset link has been sent.'
             });
             
         } catch (error) {
             console.error(`Password reset request error: ${error.message}`, error);
-            return res.status(500).render('password-reset/request', {
+            return res.status(500).render('security/reset/request', {
                 title: 'Reset Password',
                 error: 'Server error, please try again'
             });
@@ -76,7 +76,7 @@ const passwordResetController = {
             }
             
             // Render the reset form
-            return res.render('password-reset/reset', {
+            return res.render('security/reset/reset', {
                 title: 'Set New Password',
                 token,
                 error: null
@@ -99,7 +99,7 @@ const passwordResetController = {
             
             // Validate passwords match
             if (password !== confirmPassword) {
-                return res.render('password-reset/reset', {
+                return res.render('security/reset/reset', {
                     title: 'Set New Password',
                     token,
                     error: 'Passwords do not match'
@@ -108,7 +108,7 @@ const passwordResetController = {
             
             // Validate password length
             if (password.length < 6) {
-                return res.render('password-reset/reset', {
+                return res.render('security/reset/reset', {
                     title: 'Set New Password',
                     token,
                     error: 'Password must be at least 6 characters'
@@ -138,7 +138,7 @@ const passwordResetController = {
             
             console.log(`Password reset successful for: ${user.email}`);
             
-            return res.render('password-reset/success', {
+            return res.render('security/reset/success', {
                 title: 'Password Reset',
                 message: 'Your password has been updated successfully. You can now log in with your new password.'
             });

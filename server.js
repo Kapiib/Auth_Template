@@ -38,7 +38,7 @@ app.use(checkJWT);
 app.use('/', getRoutes);
 app.use('/auth', authRoutes);
 app.use('/auth', googleAuthRoutes);
-app.use('/password-reset', passwordResetRoutes);
+app.use('/security/reset', passwordResetRoutes); // Changed from '/password-reset'
 
 // Start server
 app.listen(PORT, () => {
