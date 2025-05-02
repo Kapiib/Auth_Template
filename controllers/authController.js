@@ -85,11 +85,12 @@ const authController = {
             
             // Create JWT payload with all required fields
             const payload = {
-                id: user._id,           // Ensure ID is included
-                userId: user._id,       // Keeping for backward compatibility
-                name: user.name,        // Include name
-                email: user.email,      // Include email
-                role: user.role         // Include role
+                id: user._id,           
+                userId: user._id,       
+                name: user.name,        
+                email: user.email,      
+                role: user.role,         
+                createdAt: user.createdAt 
             }
 
             // Generate token and set cookie

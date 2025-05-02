@@ -1,34 +1,26 @@
 const rateLimit = require('express-rate-limit');
 
-// Login rate limiter - 5 attempts per minute
+// Basic rate limiters for auth endpoints
 const loginLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 5, // Limit each IP to 5 requests per windowMs
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-        return res.status(429).render('login', {
-            title: 'Login',
-            error: 'Too many login attempts. Please try again in a minute.'
-        });
-    }
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // 5 requests per windowMs
+    message: 'Too many login attempts from this IP, please try again after 15 minutes'
 });
 
-// Register rate limiter - 3 attempts per minute
 const registerLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 3, // Limit each IP to 3 requests per windowMs
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-        return res.status(429).render('register', {
-            title: 'Register',
-            error: 'Too many registration attempts. Please try again in a minute.'
-        });
-    }
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 3, // 3 requests per windowMs
+    message: 'Too many registration attempts from this IP, please try again after an hour'
+});
+
+const resetRequestLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 3, // 3 requests per windowMs
+    message: 'Too many password reset attempts from this IP, please try again after an hour'
 });
 
 module.exports = {
     loginLimiter,
-    registerLimiter
+    registerLimiter,
+    resetRequestLimiter
 };

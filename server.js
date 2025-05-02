@@ -8,6 +8,7 @@ const checkJWT = require('./middleware/checkJWT');
 const authRoutes = require('./routes/authRoutes');
 const getRoutes = require('./routes/getRoutes');
 const { checkAuth } = require('./middleware/checkAuth');
+const passwordResetRoutes = require('./routes/passwordResetRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(checkJWT);
 // Routes
 app.use('/', getRoutes);
 app.use('/auth', authRoutes);
+app.use('/password-reset', passwordResetRoutes);
 
 // Start server
 app.listen(PORT, () => {
